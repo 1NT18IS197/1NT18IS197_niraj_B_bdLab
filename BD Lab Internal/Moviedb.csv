@@ -1,0 +1,23 @@
+Movie_name,IMDb_Rating,Genre,Feedback,Referrable
+3 Idiots,8.4,Comedy,11447,TRUE
+Jersey,8.6,Sport,11000,TRUE
+Drishyam,8.3,Suspense,37000,TRUE
+Dangal,8.4,Biography,36000,TRUE
+Himmatwala,1.8,Comedy,1100,FALSE
+Tees Maar Khan,2.5,Comedy,1500,FALSE
+Dil Bechara,7,Romantic,30000,TRUE
+Sholay,8.2,Action,40000,TRUE
+Mirzapur,8.4,Suspense,37869,TRUE
+Joker,2.5,Comedy,1800,FALSE
+Rockstar,7.7,Romantic,31000,TRUE
+Action Jackson,3.3,Action,2987,FALSE
+Rascals,2.8,Comedy,2000,FALSE
+Yeh Jawani hai Dewani,7.2,Romantic,35000,TRUE
+Asur,8.5,Suspense,39876,TRUE
+Kabir Singh,7.1,Romantic,37000,TRUE
+Wanted,6.6,Action,29872,FALSE
+Tandav,3.3,Suspense,2365,FALSE
+K.G.F. Chapter 1,8.3,Action,39821,TRUE
+Bahubali: The Beginning,8,Drama,34527,TRUE
+Bahubali 2: The Conclusion,8.2,Drama,36754,TRUE
+Sanju,7.7,Biography,31789,TRUE
