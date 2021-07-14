@@ -1,0 +1,98 @@
+1. Demonstrate the usage of $match, $group, aggregate pipelines.
+
+db.movie.find().pretty()
+
+****************************************************************** group() aggregate *************************************************************************************************************
+
+> db.movie.aggregate([{ $group : {_id : "$Genre", avg_rating : {$avg : "$IMDb_Rating"}}}]).pretty()
+{ "_id" : "Comedy", "avg_rating" : 3.6 }
+{ "_id" : "Romantic", "avg_rating" : 7.25 }
+{ "_id" : "Drama", "avg_rating" : 8.1 }
+{ "_id" : "Biography", "avg_rating" : 8.05 }
+{ "_id" : "Suspense", "avg_rating" : 7.125 }
+{ "_id" : "Action", "avg_rating" : 6.6 }
+{ "_id" : "Sport", "avg_rating" : 8.6 }
+
+
+******************************************************************** match() aggregate ***************************************************************************************************************
+
+> db.movie.aggregate([{ $match : { Genre : "Suspense"}}]).pretty()
+{
+        "_id" : ObjectId("60ee7ae4422fd60c5cc19a53"),
+        "Movie_name" : "Drishyam",
+        "IMDb_Rating" : 8.3,
+        "Genre" : "Suspense",
+        "Feedback" : 37000,
+        "Referrable" : true
+}
+{
+        "_id" : ObjectId("60ee7ae4422fd60c5cc19a59"),
+        "Movie_name" : "Mirzapur",
+        "IMDb_Rating" : 8.4,
+        "Genre" : "Suspense",
+        "Feedback" : 37869,
+        "Referrable" : true
+}
+{
+        "_id" : ObjectId("60ee7ae4422fd60c5cc19a5f"),
+        "Movie_name" : "Asur",
+        "IMDb_Rating" : 8.5,
+        "Genre" : "Suspense",
+        "Feedback" : 39876,
+        "Referrable" : true
+}
+{
+        "_id" : ObjectId("60ee7ae4422fd60c5cc19a62"),
+        "Movie_name" : "Tandav",
+        "IMDb_Rating" : 3.3,
+        "Genre" : "Suspense",
+        "Feedback" : 2365,
+        "Referrable" : false
+}
+
+
+******************************************************************** aggregate pipeline() ******************************************************************************************************************
+
+> db.movie.aggregate([{ $match: {Referrable : true}}, { $group : {_id : "$Genre", Avg_Rating : {$avg : "$IMDb_Rating"}}}]).pretty()
+{ "_id" : "Biography", "Avg_Rating" : 8.05 }
+{ "_id" : "Sport", "Avg_Rating" : 8.6 }
+{ "_id" : "Action", "Avg_Rating" : 8.25 }
+{ "_id" : "Comedy", "Avg_Rating" : 8.4 }
+{ "_id" : "Suspense", "Avg_Rating" : 8.4 }
+{ "_id" : "Romantic", "Avg_Rating" : 7.25 }
+{ "_id" : "Drama", "Avg_Rating" : 8.1 }
+
+
+
+2. Demonstrate the Map-Reduce aggregate function on this dataset.
+
+> var mapper = function(){emit(this.Genre,this["Feedback"])}
+> var reduce = function(Genre,Feedback){return Array.sum(Feedback)}
+> db.movie.mapReduce(mapper,reduce, {out : "Feedbackcount"})
+{ "result" : "Feedbackcount", "ok" : 1 }
+> db.Feedbackcount.find().pretty()
+{ "_id" : "Sport", "value" : 11000 }
+{ "_id" : "Biography", "value" : 67789 }
+{ "_id" : "Suspense", "value" : 117110 }
+{ "_id" : "Drama", "value" : 71281 }
+{ "_id" : "Comedy", "value" : 17847 }
+{ "_id" : "Romantic", "value" : 133000 }
+{ "_id" : "Action", "value" : 112680 }
+
+
+3. Count the number of Movies which belong to the thriller category and find out the total number of positive reviews in that category.
+
+> db.movie.aggregate([{ $group : {_id : { Genre : "Suspense"}, "Total Positive Reviews" : {$sum : "$Feedback"}}}])
+{ "_id" : { "Genre" : "Suspense" }, "Total Positive Reviews" : 530707 }
+
+
+4. Group all the records by genre and find out the total number of positive feedbacks by genre.
+
+> db.movie.aggregate([{ $group : {_id : "$Genre", "Total Positive Reviews" : {$sum : "$Feedback"}}}]).pretty()
+{ "_id" : "Comedy", "Total Positive Reviews" : 17847 }
+{ "_id" : "Romantic", "Total Positive Reviews" : 133000 }
+{ "_id" : "Drama", "Total Positive Reviews" : 71281 }
+{ "_id" : "Biography", "Total Positive Reviews" : 67789 }
+{ "_id" : "Suspense", "Total Positive Reviews" : 117110 }
+{ "_id" : "Action", "Total Positive Reviews" : 112680 }
+{ "_id" : "Sport", "Total Positive Reviews" : 11000 }
